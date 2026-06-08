@@ -9,15 +9,15 @@ public sealed class SearchDestinations : ISlice
     public void AddEndpoint(IEndpointRouteBuilder endpointRouteBuilder)
     {
         endpointRouteBuilder.MapGet("api/destinations",
-             (string? searchFor,
+            (string? searchFor,
                 IMediator mediator,
                 CancellationToken cancellationToken,
                 ClaimsPrincipal user) =>
-             { 
-                 return mediator.Send(
-                     new SearchDestinationsQuery(searchFor),
-                     cancellationToken);
-             }); 
+            {
+                return mediator.Send(
+                    new SearchDestinationsQuery(searchFor),
+                    cancellationToken);
+            }).RequireAuthorization();
     }
 
     public sealed class SearchDestinationsQuery(string? searchFor) : IRequest<IResult>

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 using TravelInspiration.API.Destinations;
 using TravelInspiration.API.Destinations.Shared.Slices;
 
@@ -15,6 +17,9 @@ builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsigh
     ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("EntraId"));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +33,9 @@ else
     app.UseExceptionHandler();
 }
 app.UseStatusCodePages();
+
+app.UseAuthentication();
+app.UseAuthorization();
  
 app.MapSliceEndpoints();
 
