@@ -17,6 +17,10 @@ builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsigh
     ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
 });
 
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("DestinationsReadRoleIsRequired", 
+        policy => policy.RequireRole("Destinations.Read"));
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("EntraId"));
 
